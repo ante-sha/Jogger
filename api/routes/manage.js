@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 
 const checkAuth = require('../middleware/auth')
-const Entry = require('../models/entry')
-const User = require('../models/users')
+
+const manageService = require('../services/manageService')
 
 //  lista svih unosa istog usera
 router.use('/', checkAuth, (req, res, next) => {
@@ -15,40 +15,12 @@ router.use('/', checkAuth, (req, res, next) => {
 })
 
 router.get('/entry', function (req, res) {
-  Entry.find().exec().then(docs => {
-    res.status(200).json({
-      Count: docs.length,
-      Entries: docs.map(doc => {
-        return {
-          _id: doc._id,
-          userId: doc.userId,
-          duration: doc.duration,
-          length: doc.length,
-          week: doc.week,
-          request: {
-            type1: 'GET, DELETE, PATCH',
-            url1: 'http://localhost:3000/entry/' + doc._id,
-            type2: 'GET',
-            url2: 'http://localhost:3000/entry/us/' + doc.userId
-          }
-        }
-      })
-    })
-  }).catch(err => {
-    console.log(err)
-    res.status(500).json({
-      error: err
-    })
-  })
+  manageService.getAllEntries().then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
 })
 
 //  uređivanje unosa
 router.patch('/promote', function (req, res) {
-  User.update({_id: req.body.userId}, {$set: {rank: req.body.newRank}}).exec().then(
-    res.status(200).json({message: 'Success'})).catch(err => {
-    console.log(err)
-    res.status(500).json({error: err})
-  })
+  manageService.patchPromote(req).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
 })
 
 router.use('/', (req, res, next) => {

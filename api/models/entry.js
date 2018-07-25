@@ -5,7 +5,7 @@ const entrySchema = mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   duration: {type: Number, required: true},
   length: {type: Number, required: true},
-  week: {type: Number, required: true, min: 0}
+  date: {type: Date, required: true}
 })
 
 module.exports = mongoose.model('Entry', entrySchema)
