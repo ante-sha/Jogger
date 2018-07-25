@@ -58,7 +58,7 @@ router.patch('/:entryId', function (req, res) {
 //  brisanje unosa
 router.delete('/:entryId', function (req, res) {
   const id = req.params.entryId
-  entryService.deleteEntryById(id).then(response => res.status(200).json(response)).catch(error => res.status(400).json(error))
+  entryService.deleteEntryById(id, req).then(response => res.status(200).json(response)).catch(error => res.status(400).json(error))
 })
 
 // ako nigdje funkcija ne naiđe na odgovor znači da ne postoji takva metoda

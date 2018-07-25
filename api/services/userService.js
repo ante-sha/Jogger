@@ -20,8 +20,9 @@ module.exports = {
                 rank: a.rank,
                 request: {
                   type1: 'GET, DELETE',
-                  url1: 'http://localhost:3000/users/' + a._id
-                  //  type2 ce bit kad napravimo admina
+                  url1: 'http://localhost:3000/users/' + a._id,
+                  type2: 'GET',
+                  url2: 'http://localhost:3000/entry/users/' + a._id
                 }
               }
             })
@@ -86,7 +87,11 @@ module.exports = {
             }, 'kljuc', {expiresIn: '3h'})
             resolve({
               message: 'You are now logged in',
-              token: token
+              token: token,
+              request: {
+                type: 'GET',
+                url: 'http://localhost/entry/users/' + req.userData.userId
+              }
             })
           }
         }
@@ -107,8 +112,8 @@ module.exports = {
         email: res.userData.email,
         rank: res.userData.rank,
         request: {
-          type1: 'GET',
-          url1: 'http://localhost:3000/entry/us/' + res.userData._id
+          type1: 'DELETE',
+          url1: 'http://localhost:3000/entry/users/' + res.userData._id
           //  type2 ce bit kad napravimo admina
         }
       })

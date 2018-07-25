@@ -20,7 +20,7 @@ module.exports = {
                 type1: 'GET, DELETE, PATCH',
                 url1: 'http://localhost:3000/entry/' + doc._id,
                 type2: 'GET',
-                url2: 'http://localhost:3000/entry/us/' + doc.userId
+                url2: 'http://localhost:3000/entry/users/' + doc.userId
               }
             }
           })
@@ -35,7 +35,13 @@ module.exports = {
   patchPromote: (req) => {
     return new Promise((resolve, reject) => {
       User.update({_id: req.body.userId}, {$set: {rank: req.body.newRank}}).exec().then(
-        resolve({message: 'Success'})).catch(err => {
+        resolve({
+          message: 'Success',
+          request: {
+            type: 'GET',
+            url: 'http://localhost:3000/users/' + req.body.userId
+          }
+        })).catch(err => {
         console.log(err)
         reject(err)
       })

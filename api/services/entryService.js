@@ -16,8 +16,10 @@ module.exports = {
                 duration: a.duration,
                 length: a.length,
                 request: {
-                  type: 'GET, DELETE, PATCH',
-                  url: 'http://localhost:3000/entry/' + a._id
+                  type1: 'GET, DELETE, PATCH',
+                  url1: 'http://localhost:3000/entry/' + a._id,
+                  type2: 'GET',
+                  url2: 'http://localhost:3000/reports/' + a.userId
                 }
               }
             })
@@ -56,10 +58,10 @@ module.exports = {
           length: result.length,
           date: result.date,
           request: {
-            type1: 'DELETE PATCH',
+            type1: 'GET, DELETE, PATCH',
             url1: 'http://localhost:3000/entry/' + result._id,
             type2: 'GET',
-            url2: 'http://localhost:3000/entry/us/' + result.userId
+            url2: 'http://localhost:3000/entry/users/' + result.userId
           }
         }
         resolve(response)
@@ -85,7 +87,7 @@ module.exports = {
               type1: 'DELETE, PATCH',
               url1: 'http://localhost:3000/entry/' + result._id,
               type2: 'GET',
-              url2: 'http://localhost:3000/entry/us/' + result.userId
+              url2: 'http://localhost:3000/entry/users/' + result.userId
             }
           }
           resolve(response)
@@ -110,7 +112,15 @@ module.exports = {
         }
       }).exec().then(result => {
         console.log(result)
-        resolve({message: 'Entry modified'})
+        resolve({
+          message: 'Entry modified',
+          request: {
+            type1: 'GET, DELETE, PATCH',
+            url1: 'http://localhost:3000/entry/' + id,
+            type2: 'GET',
+            url2: 'http://localhost:3000/entry/users/' + req.userData.userId
+          }
+        })
       }).catch(err => {
         console.log(err)
         err.message = 'Some of the fields are not valid'
@@ -119,12 +129,18 @@ module.exports = {
     })
   },
 
-  deleteEntryById: (id) => {
+  deleteEntryById: (id, req) => {
     return new Promise((resolve, reject) => {
       Entry.remove({_id: id}).exec().then(result => {
         console.log(result)
         //  res.status(200).json({message: 'Entry deleted'})
-        resolve({message: 'Entry deleted'})
+        resolve({
+          message: 'Entry deleted',
+          request: {
+            type: 'GET',
+            url: 'http://localhost:3000/entry/users/' + req.userData.userId
+          }
+        })
       }).catch(err => {
         console.log(err)
         err.message = 'Wrong entryId'
