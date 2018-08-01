@@ -17,7 +17,7 @@ module.exports = {
         } else {
           resolve({
             userId: req.params.userId,
-            Report: result.map(a => {
+            report: result.map(a => {
               return {
                 week: a._id.week,
                 year: a._id.year,

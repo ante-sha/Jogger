@@ -5,7 +5,7 @@ const Entry = require('../models/entry')
 module.exports = {
   getEntriesByUserId: (id) => {
     return new Promise((resolve, reject) => {
-      Entry.find({userId: mongoose.Types.ObjectId(id)}).select('_id userId duration length').exec().then(doc => {
+      Entry.find({userId: mongoose.Types.ObjectId(id)}).select('_id userId duration length date').exec().then(doc => {
         if (doc.length > 0) {
           const response = {
             count: doc.length,
@@ -15,6 +15,7 @@ module.exports = {
                 userId: a.userId,
                 duration: a.duration,
                 length: a.length,
+                date: a.date,
                 request: {
                   type1: 'GET, DELETE, PATCH',
                   url1: 'http://localhost:3000/entry/' + a._id,
@@ -28,9 +29,7 @@ module.exports = {
           resolve(response)
         } else {
           //    res.status(404).json({message: 'Entries not found'})
-          const error = new Error('Entries not found')
-          error.status = 400
-          reject(error)
+          resolve({message: 'User has no entries'})
         }
       }).catch(error => {
         console.log(error)
@@ -56,13 +55,7 @@ module.exports = {
           userId: result.userId,
           duration: result.duration,
           length: result.length,
-          date: result.date,
-          request: {
-            type1: 'GET, DELETE, PATCH',
-            url1: 'http://localhost:3000/entry/' + result._id,
-            type2: 'GET',
-            url2: 'http://localhost:3000/entry/users/' + result.userId
-          }
+          date: result.date
         }
         resolve(response)
       }).catch(error => {

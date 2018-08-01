@@ -15,7 +15,7 @@ module.exports = {
               userId: doc.userId,
               duration: doc.duration,
               length: doc.length,
-              week: doc.week,
+              date: doc.date,
               request: {
                 type1: 'GET, DELETE, PATCH',
                 url1: 'http://localhost:3000/entry/' + doc._id,

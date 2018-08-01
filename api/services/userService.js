@@ -7,7 +7,7 @@ const Entry = require('../models/entry')
 module.exports = {
   getAllVisUsers: (req) => {
     return new Promise((resolve, reject) => {
-      User.find({ $or: [ { _id: req.userData.userId }, { rank: {$lt: req.userData.rank} } ] }).exec().then(doc => {
+      User.find({ rank: { $lt: req.userData.rank } }).exec().then(doc => {
         if (doc.length >= 1) {
           const response = {
             count: doc.length,
@@ -55,11 +55,10 @@ module.exports = {
         }, 'kljuc', {expiresIn: '3h'})
         console.log(result)
         resolve({
-          newUser: {
+          token: token,
+          user: {
             _id: user._id,
-            email: user.email,
-            rank: user.rank,
-            token: token
+            rank: user.rank
           },
           Request: {
             type: 'GET, DELETE',
@@ -80,6 +79,7 @@ module.exports = {
         if (response) {
           if (response.pass === req.body.pass) {
             //  logiraj usera,token i takve stvari
+            console.log(response._id)
             const token = jwt.sign({
               email: response.email,
               userId: response._id,
@@ -88,9 +88,13 @@ module.exports = {
             resolve({
               message: 'You are now logged in',
               token: token,
+              user: {
+                _id: response._id,
+                rank: response.rank
+              },
               request: {
                 type: 'GET',
-                url: 'http://localhost/entry/users/' + req.userData.userId
+                url: 'http://localhost/entry/users/' + response._id
               }
             })
           }
