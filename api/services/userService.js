@@ -97,10 +97,14 @@ module.exports = {
                 url: 'http://localhost/entry/users/' + response._id
               }
             })
+          } else {
+            const error = new Error('Wrong credentials')
+            reject(error)
           }
+        } else {
+          const error = new Error('Wrong credentials')
+          reject(error)
         }
-        const error = new Error('Wrong credentials')
-        reject(error)
       }).catch(err => {
         console.log(err)
         err.message = 'Wrong credentials'

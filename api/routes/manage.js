@@ -20,7 +20,12 @@ router.get('/entry', function (req, res) {
 
 //  uređivanje unosa
 router.patch('/promote', function (req, res) {
-  manageService.patchPromote(req).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
+  if (req.body.newRank >= 1 && req.body.newRank <= 3) {
+    manageService.patchPromote(req).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
+  } else {
+    const error = new Error('Bad request')
+    res.status(400).json(error)
+  }
 })
 
 router.use('/', (req, res, next) => {

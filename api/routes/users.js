@@ -16,7 +16,7 @@ router.post('/signup', function (req, res) {
 })
 
 router.post('/login', function (req, res) {
-  userService.postLogin(req).then(result => res.status(200).json(result)).catch(error => res.status(401).json(error))
+  userService.postLogin(req).then(result => res.status(200).json(result)).catch(error => res.status(401).json({message: error.message}))
 })
 //  lik stavlja neke returne tu gore
 //  brisanje unosa
