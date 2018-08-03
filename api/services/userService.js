@@ -67,7 +67,7 @@ module.exports = {
         })
       }).catch(error => {
         console.log(error)
-        error.message = 'Email has to be unique'
+        error.message = 'Email has to be unique and valid'
         reject(error)
       })
     })

@@ -60,7 +60,7 @@ module.exports = {
         resolve(response)
       }).catch(error => {
         console.log(error)
-        error.message = 'Wrong types of some fields'
+        error.message = 'Wrong inputs'
         reject(error)
       })
     })
