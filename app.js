@@ -8,6 +8,7 @@ const entryRoutes = require('./api/routes/entry')
 const reportsRoutes = require('./api/routes/reports')
 const usersRoutes = require('./api/routes/users')
 const manageRoutes = require('./api/routes/manage')
+const verifyRoutes = require('./api/routes/verify')
 
 mongoose.connect('mongodb://localhost/27017')
 
@@ -29,6 +30,7 @@ app.use('/entry', entryRoutes)
 app.use('/reports', reportsRoutes)
 app.use('/users', usersRoutes)
 app.use('/manage', manageRoutes)
+app.use('/verify', verifyRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')

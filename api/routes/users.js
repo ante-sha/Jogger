@@ -44,8 +44,12 @@ router.get('/:userId', checkAuth, function (req, res) {
 })
 //  brisanje usera i njegovih unosa
 router.delete('/:userId', checkAuth, function (req, res) {
-  const id = req.params.userId
-  userService.deleteUser(id).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
+  if (req.userData.userId !== req.params.userId) {
+    const id = req.params.userId
+    userService.deleteUser(id).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
+  } else {
+    res.status(400).json({message: 'Operation not posible'})
+  }
 })
 
 router.use('/', (req, res, next) => {

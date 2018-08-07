@@ -29,7 +29,11 @@ module.exports = {
           resolve(response)
         } else {
           //    res.status(404).json({message: 'Entries not found'})
-          resolve({message: 'User has no entries'})
+          resolve({
+            message: 'User has no entries',
+            count: 0,
+            entry: []
+          })
         }
       }).catch(error => {
         console.log(error)
