@@ -5,10 +5,10 @@ module.exports = (req, res, next) => {
     var token = req.headers['authorization']
     const decoded = jwt.verify(token.split(' ')[1], 'kljuc')
     req.userData = decoded
-    User.findById(req.userData.userId).exec().then(res =>{
+    User.findById(req.userData.userId).exec().then(res => {
       if (res) next()
-      else return res.status(401).json({message: err.statusText})
-    }).catch(err => { return res.status(401).json({message: err.statusText})})
+      else return res.status(401).json({message: 'Unauthorised'})
+    }).catch(err => { return res.status(401).json({message: err.statusText}) })
   } catch (error) {
     return res.status(401).json({message: 'Auth failed'})
   }

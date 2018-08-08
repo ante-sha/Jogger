@@ -12,7 +12,11 @@ router.get('/', checkAuth, function (req, res) {
 
 //  novi user
 router.post('/signup', function (req, res) {
-  userService.postSignUp(req).then(result => res.status(201).json(result)).catch(error => res.status(400).json(error))
+  if (req.body.pass.length >= 6 && req.body.pass.length <= 12) {
+    userService.postSignUp(req).then(result => res.status(201).json(result)).catch(error => res.status(400).json(error))
+  } else {
+    res.status(400).json({message: 'Password is not valid!'})
+  }
 })
 
 router.post('/login', function (req, res) {
@@ -40,7 +44,7 @@ router.use('/:userId', checkAuth, (req, res, next) => {
 })
 
 router.get('/:userId', checkAuth, function (req, res) {
-  userService.getOneUser(res).then(result => res.status(200).json(result)).catch(error => res.status(500).json(error))
+  userService.getOneUser(res).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
 })
 //  brisanje usera i njegovih unosa
 router.delete('/:userId', checkAuth, function (req, res) {

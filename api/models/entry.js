@@ -9,4 +9,3 @@ const entrySchema = mongoose.Schema({
 })
 
 module.exports = mongoose.model('Entry', entrySchema)
-//  VRIJEDNOSTI SU MIJENJANE
