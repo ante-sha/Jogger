@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --reporter spec --bail",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -19,6 +19,9 @@
     "nodemailer": "^4.6.7"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.3"
   }
 }
