@@ -25,10 +25,8 @@ module.exports = {
               }
             })
           }
-          //          res.status(200).json(response)
           resolve(response)
         } else {
-          //    res.status(404).json({message: 'Entries not found'})
           resolve({
             message: 'User has no entries',
             count: 0,
@@ -37,7 +35,6 @@ module.exports = {
         }
       }).catch(error => {
         console.log(error)
-        //        res.status(500).json({message: error})
         const err = new Error()
         err.message = 'Something went wrong'
         reject(err)
@@ -138,7 +135,6 @@ module.exports = {
     return new Promise((resolve, reject) => {
       Entry.remove({_id: id}).exec().then(result => {
         console.log(result)
-        //  res.status(200).json({message: 'Entry deleted'})
         resolve({
           message: 'Entry deleted'
         })

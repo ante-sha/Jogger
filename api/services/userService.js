@@ -18,7 +18,6 @@ module.exports = {
                 _id: a._id,
                 email: a.email,
                 pass: a.pass,
-                //  poslije ce se obrisat
                 rank: a.rank,
                 verify: a.verify,
                 request: {
@@ -129,7 +128,6 @@ module.exports = {
         request: {
           type1: 'DELETE',
           url1: 'http://localhost:3000/entry/users/' + res.userData._id
-          //  type2 ce bit kad napravimo admina
         }
       })
     })
