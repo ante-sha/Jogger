@@ -11,7 +11,7 @@ router.get('/users/:userId', checkAuth, checkAuth2, function (req, res, next) {
   const id = req.params.userId
   entryService.getEntriesByUserId(id).then(function (response) {
     return res.status(200).json(response)
-  }).catch(error => res.status(400).json(error))
+  }).catch(error => res.status(503).json(error))
 })
 
 router.post('/', checkAuth, checkAuth2, function (req, res, next) {
@@ -35,16 +35,16 @@ router.use('/:entryId', checkAuth, function (req, res, next) {
       }
     }).catch(error => {
       console.log(error)
-      return res.status(400).json({error: 'Something went wrong'})
+      return res.status(404).json({error: 'Not found'})
     })
   } else {
-    return res.status(400).json({message: 'Bad request'})
+    return res.status(405).json({message: 'Method not allowed'})
   }
 })
 
 router.get('/:entryId', function (req, res) {
   const id = req.params.entryId
-  entryService.getEntryById(id).then(response => { res.status(200).json(response) }).catch(error => res.status(400).json(error))
+  entryService.getEntryById(id).then(response => { res.status(200).json(response) }).catch(error => res.status(503).json(error))
 })
 
 //  stavljanje novog unosa
@@ -58,7 +58,7 @@ router.patch('/:entryId', function (req, res) {
 //  brisanje unosa
 router.delete('/:entryId', function (req, res) {
   const id = req.params.entryId
-  entryService.deleteEntryById(id, req).then(response => res.status(200).json(response)).catch(error => res.status(400).json(error))
+  entryService.deleteEntryById(id, req).then(response => res.status(200).json(response)).catch(error => res.status(503).json(error))
 })
 
 // ako nigdje funkcija ne naiđe na odgovor znači da ne postoji takva metoda

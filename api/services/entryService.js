@@ -38,8 +38,9 @@ module.exports = {
       }).catch(error => {
         console.log(error)
         //        res.status(500).json({message: error})
-        error.message = 'Something went wrong'
-        reject(error)
+        const err = new Error()
+        err.message = 'Something went wrong'
+        reject(err)
       })
     })
   },
@@ -94,6 +95,7 @@ module.exports = {
         }
       }).catch(err => {
         console.log(err)
+        err.message = 'Not found'
         reject(err)
       })
     })
@@ -101,28 +103,34 @@ module.exports = {
 
   patchEntryById: (id, req) => {
     return new Promise((resolve, reject) => {
-      Entry.update({_id: id}, {
-        $set: {
-          duration: req.body.newDuration,
-          length: req.body.newLength,
-          date: req.body.newDate
-        }
-      }).exec().then(result => {
-        console.log(result)
-        resolve({
-          message: 'Entry modified',
-          request: {
-            type1: 'GET, DELETE, PATCH',
-            url1: 'http://localhost:3000/entry/' + id,
-            type2: 'GET',
-            url2: 'http://localhost:3000/entry/users/' + req.userData.userId
+      let p
+      try {
+        p = req.body.newDate.getTime() - new Date('2018-08-01').getTime()
+      } catch (error) {
+        error.message = 'Some of the fields are not valid'
+        reject(error)
+      }
+      if (req.body.newDuration > 0 && req.body.newLength > 0 && p >= 0) {
+        Entry.update({_id: id}, {
+          $set: {
+            duration: req.body.newDuration,
+            length: req.body.newLength,
+            date: req.body.newDate
           }
+        }).exec().then(result => {
+          console.log(result)
+          resolve({
+            message: 'Entry modified'
+          })
+        }).catch(err => {
+          console.log(err)
+          err.message = 'Some of the fields are not valid'
+          reject(err)
         })
-      }).catch(err => {
-        console.log(err)
-        err.message = 'Some of the fields are not valid'
-        reject(err)
-      })
+      } else {
+        const error = new Error('Some of the fields are not valid')
+        reject(error)
+      }
     })
   },
 
@@ -132,11 +140,7 @@ module.exports = {
         console.log(result)
         //  res.status(200).json({message: 'Entry deleted'})
         resolve({
-          message: 'Entry deleted',
-          request: {
-            type: 'GET',
-            url: 'http://localhost:3000/entry/users/' + req.userData.userId
-          }
+          message: 'Entry deleted'
         })
       }).catch(err => {
         console.log(err)

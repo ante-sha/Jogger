@@ -7,16 +7,12 @@ const userService = require('../services/userService')
 
 //  lista svih unosa istog usera
 router.get('/', checkAuth, function (req, res) {
-  userService.getAllVisUsers(req).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
+  userService.getAllVisUsers(req).then(result => res.status(200).json(result)).catch(error => res.status(503).json(error))
 })
 
 //  novi user
 router.post('/signup', function (req, res) {
-  if (req.body.pass.length >= 6 && req.body.pass.length <= 12) {
-    userService.postSignUp(req).then(result => res.status(201).json(result)).catch(error => res.status(400).json(error))
-  } else {
-    res.status(400).json({message: 'Password is not valid!'})
-  }
+  userService.postSignUp(req).then(result => res.status(201).json({message: 'User created!'})).catch(error => res.status(400).json(error))
 })
 
 router.post('/login', function (req, res) {
@@ -52,7 +48,7 @@ router.delete('/:userId', checkAuth, function (req, res) {
     const id = req.params.userId
     userService.deleteUser(id).then(result => res.status(200).json(result)).catch(error => res.status(400).json(error))
   } else {
-    res.status(400).json({message: 'Operation not posible'})
+    res.status(400).json({message: 'Operation is not posible'})
   }
 })
 

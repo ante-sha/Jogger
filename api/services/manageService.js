@@ -2,6 +2,7 @@
 
 const Entry = require('../models/entry')
 const User = require('../models/users')
+const mongoose = require('mongoose')
 
 module.exports = {
   getAllEntries: function () {
@@ -34,17 +35,23 @@ module.exports = {
 
   patchPromote: (req) => {
     return new Promise((resolve, reject) => {
-      User.update({_id: req.body.userId}, {$set: {rank: req.body.newRank}}).exec().then(
-        resolve({
-          message: 'Success',
-          request: {
-            type: 'GET',
-            url: 'http://localhost:3000/users/' + req.body.userId
-          }
-        })).catch(err => {
-        console.log(err)
-        reject(err)
-      })
+      if (req.body.userId.length === 24) {
+        User.update({_id: req.body.userId}, {$set: {rank: req.body.newRank}}).exec().then(
+          resolve({
+            message: 'Success',
+            request: {
+              type: 'GET',
+              url: 'http://localhost:3000/users/' + req.body.userId
+            }
+          })).catch(err => {
+          console.log(err)
+          reject(err)
+        })
+      } else {
+        const error = new Error()
+        error.message = 'userId is not valid'
+        reject(error)
+      }
     })
   }
 }

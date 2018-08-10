@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
           if (user.rank < req.userData.rank) {
             next()
           } else {
-            return res.status(401).json({message: 'Unauthorised'})
+            return res.status(401).json({message: 'Unauthorized'})
           }
         }).catch(err => {
           console.log(err)
@@ -25,7 +25,7 @@ module.exports = (req, res, next) => {
           if (user.rank < req.userData.rank) {
             next()
           } else {
-            return res.status(401).json({message: 'Unauthorised'})
+            return res.status(401).json({message: 'Unauthorized'})
           }
         }).catch(err => {
           console.log(err)

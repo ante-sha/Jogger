@@ -32,8 +32,7 @@ module.exports = {
           }
           resolve(response)
         } else {
-          const err = new Error('Users not found')
-          reject(err)
+          resolve({count: 0, users: []})
         }
       }).catch(error => {
         console.log(error)
@@ -44,26 +43,32 @@ module.exports = {
 
   postSignUp: (req) => {
     return new Promise((resolve, reject) => {
-      bcrypt.hash(req.body.pass, 10, (err, hash) => {
-        if (err) return reject(err)
-        else {
-          const user = new User({
-            _id: new mongoose.Types.ObjectId(),
-            email: req.body.email,
-            pass: hash,
-            rank: 1,
-            verify: false
-          })
-          user.save().then(result => {
-            console.log(result)
-            mailVerService.sendConfirmationEmail(req.body.email).then(info => resolve(info)).catch(err => console.log(err))
-          }).catch(error => {
-            console.log(error)
-            error.message = 'Email has to be unique and valid'
-            reject(error)
-          })
-        }
-      })
+      if (req.body.pass.length >= 6 && req.body.pass.length <= 12) {
+        bcrypt.hash(req.body.pass, 10, (err, hash) => {
+          if (err) return reject(err)
+          else {
+            const user = new User({
+              _id: new mongoose.Types.ObjectId(),
+              email: req.body.email,
+              pass: hash,
+              rank: 1,
+              verify: false
+            })
+            user.save().then(result => {
+              console.log(result)
+              mailVerService.sendConfirmationEmail(req.body.email).then(info => resolve({info, userId: user._id})).catch(err => console.log(err))
+            }).catch(error => {
+              console.log(error)
+              error.message = 'Email has to be unique and valid'
+              reject(error)
+            })
+          }
+        })
+      } else {
+        const error = new Error('Password is not valid!')
+        error.status = 400
+        reject(error)
+      }
     })
   },
 
